@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><!--  APP 启动页面布局文件  -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+
+            android:id="@+id/lanuchImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/lanucher_bg" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/countButton"
+            android:layout_width="140px"
+            android:layout_height="65px"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/light_translucent_circle_bg"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>
