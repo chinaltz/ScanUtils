@@ -99,11 +99,17 @@ final class CameraConfigurationManager {
     }
 
     void openFlashlight(Camera camera) {
-        doSetTorch(camera, true);
+        Camera.Parameters parameter = camera.getParameters();
+        parameter.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+        camera.setParameters(parameter);
+//        doSetTorch(camera, true);
     }
 
     void closeFlashlight(Camera camera) {
-        doSetTorch(camera, false);
+//        doSetTorch(camera, false);
+        Camera.Parameters parameter = camera.getParameters();
+        parameter.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        camera.setParameters(parameter);
     }
 
     private void doSetTorch(Camera camera, boolean newSetting) {

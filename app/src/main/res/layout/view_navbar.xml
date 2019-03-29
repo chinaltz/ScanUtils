@@ -65,7 +65,7 @@
             android:layout_centerVertical="true"
             android:text="标题"
             android:textColor="@color/white"
-            android:textSize="22dp" />
+            android:textSize="20dp" />
 
 
         <LinearLayout
@@ -81,7 +81,7 @@
 
             <ImageView
                 android:id="@+id/nav_right_icon"
-                android:layout_width="12dp"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|left"
                 android:layout_marginLeft="10px"

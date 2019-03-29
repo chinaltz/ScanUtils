@@ -106,15 +106,22 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     void openFlashlight() {
-        if (flashLightAvailable()) {
-            mCameraConfigurationManager.openFlashlight(mCamera);
-        }
+        Camera.Parameters parameter = mCamera.getParameters();
+        parameter.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        mCamera.setParameters(parameter);
+//        if (flashLightAvailable()) {
+//            mCameraConfigurationManager.openFlashlight(mCamera);
+//        }
     }
 
     void closeFlashlight() {
-        if (flashLightAvailable()) {
-            mCameraConfigurationManager.closeFlashlight(mCamera);
-        }
+//        if (flashLightAvailable()) {
+//            mCameraConfigurationManager.closeFlashlight(mCamera);
+//        }
+
+        Camera.Parameters parameter = mCamera.getParameters();
+        parameter.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        mCamera.setParameters(parameter);
     }
 
     private boolean flashLightAvailable() {

@@ -16,10 +16,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.developer.androidutilslib.utils.ISStringUtils;
 import com.developer.androidutilslib.utils.ISToastUtils;
+import com.developer.androidutilslib.utils.permission.ISPermissionDialogHelper;
 import com.developer.androidutilslib.utils.permission.ISPermissionUtils;
 import com.litingzhe.scanutils.MyApplication;
 import com.litingzhe.scanutils.R;
+import com.litingzhe.scanutils.activity.BarCodeDetialActivity;
 import com.litingzhe.scanutils.db.BarCodeDataDao;
 
 import java.util.List;
@@ -32,6 +35,9 @@ import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import cn.bingoogolapple.qrcode.core.BarcodeType;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -44,7 +50,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
  */
 
 
-public class QRFragment extends Fragment implements QRCodeView.Delegate {
+public class QRFragment extends Fragment implements QRCodeView.Delegate, EasyPermissions.PermissionCallbacks {
 
 
     @BindView(R.id.transtantAdapterView)
@@ -67,16 +73,15 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
     ZXingView zxingview;
     Unbinder unbinder;
     @BindView(R.id.flash)
-    Button flash;
+    LinearLayout flash;
     @BindView(R.id.seletcImage)
-    Button seletcImage;
+    LinearLayout seletcImage;
     private View rootView;
     private FragmentActivity mContext;
     private boolean isOpen = false;
     private static final int REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY = 666;
-    private BarCodeDataDao barCodeDao;
-
-
+    private static final int REQUEST_CODE_QRCODE_PERMISSIONS = 1;
+    private static final int REQUEST_CODE_STORAGE_PERMISSIONS = 2;
 
     @Nullable
     @Override
@@ -90,14 +95,14 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
 
         }
 
+
         unbinder = ButterKnife.bind(this, rootView);
+        navTitle.setText("扫码");
         zxingview.setDelegate(this);
         zxingview.getScanBoxView().setOnlyDecodeScanBoxArea(true);
         zxingview.setType(BarcodeType.ALL, null);
-
-
         zxingview.changeToScanQRCodeStyle();
-        barCodeDao = MyApplication.getInstance().getDaoSession().getBarCodeDataDao();
+        doScan();
 
         return rootView;
 
@@ -113,30 +118,13 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
     @Override
     public void onResume() {
         super.onResume();
+//        zxingview.startSpotAndShowRect();
 
-        ISPermissionUtils.permission(Manifest.permission_group.CAMERA)
-                .rationale(new ISPermissionUtils.OnRationaleListener() {
-                    @Override
-                    public void rationale(ShouldRequest shouldRequest) {
-                        shouldRequest.again(true);
-                    }
-                })
+        if (EasyPermissions.hasPermissions(mContext, Manifest.permission.CAMERA)) {
 
-                .callback(new ISPermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(List<String> permissionsGranted) {
-                        zxingview.startCamera();
+            zxingview.startSpotAndShowRect();
 
-                        zxingview.startSpotAndShowRect();
-                    }
-
-                    @Override
-                    public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
-
-                    }
-
-                }).request();
-
+        }
 
     }
 
@@ -157,10 +145,22 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
 
     @Override
     public void onScanQRCodeSuccess(String result, String codeType) {
-        vibrate();
 
-        ISToastUtils.showShort("码数据"+result + "码类型"+codeType);
-        zxingview.startSpot(); // 开始识别
+        if (!ISStringUtils.isEmpty(result)) {
+            vibrate();
+
+//            ISToastUtils.showShort("码数据" + result + "码类型" + codeType);
+            Intent intent = new Intent(mContext, BarCodeDetialActivity.class);
+
+            intent.putExtra("result", result);
+
+            intent.putExtra("codeType", codeType);
+
+            startActivity(intent);
+
+            zxingview.stopSpot(); // 开始识别
+        }
+
     }
 
     @Override
@@ -209,17 +209,11 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
 
                 break;
             case R.id.seletcImage:
-                Intent photoPickerIntent = new BGAPhotoPickerActivity.IntentBuilder(getContext())
-                        .cameraFileDir(null)
-                        .maxChooseCount(1)
-                        .selectedPhotos(null)
-                        .pauseOnScroll(false)
-                        .build();
-                startActivityForResult(photoPickerIntent, REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY);
+                doOpenGlarry();
+
                 break;
         }
     }
-
 
 
     @Override
@@ -234,4 +228,68 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
 
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }
+
+    }
+
+
+    @AfterPermissionGranted(REQUEST_CODE_QRCODE_PERMISSIONS)
+    public void doScan() {
+
+
+        if (EasyPermissions.hasPermissions(mContext, Manifest.permission.CAMERA)) {
+
+            zxingview.startCamera();
+            zxingview.startSpotAndShowRect();
+
+        } else {
+            // Ask for one permission
+
+
+            EasyPermissions.requestPermissions(this, "扫码需要打开照相机",
+                    REQUEST_CODE_QRCODE_PERMISSIONS, Manifest.permission.CAMERA);
+        }
+    }
+
+
+    @AfterPermissionGranted(REQUEST_CODE_STORAGE_PERMISSIONS)
+    public void doOpenGlarry() {
+
+
+        if (EasyPermissions.hasPermissions(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            Intent photoPickerIntent = new BGAPhotoPickerActivity.IntentBuilder(getContext())
+                    .cameraFileDir(null)
+                    .maxChooseCount(1)
+                    .selectedPhotos(null)
+                    .pauseOnScroll(false)
+                    .build();
+            startActivityForResult(photoPickerIntent, REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY);
+
+        } else {
+            // Ask for one permission
+
+
+            EasyPermissions.requestPermissions(this, "打开相册需要本地存储权限",
+                    REQUEST_CODE_STORAGE_PERMISSIONS, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
+
 }

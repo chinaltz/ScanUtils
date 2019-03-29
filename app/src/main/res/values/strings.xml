@@ -1,7 +1,5 @@
 <resources>
-    <string name="app_name">ScanUtils</string>
+    <string name="app_name">扫码工具</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_bar_code_detial">BarCodeDetialActivity</string>
+
 </resources>

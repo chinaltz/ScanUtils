@@ -40,6 +40,7 @@ public class MyApplication extends Application {
         //        文件路径初始化
 
         this.instance = this;
+        setDatabase();
         //崩溃日志 初始化
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -57,7 +58,7 @@ public class MyApplication extends Application {
             return;
         }
 
-        setDatabase();
+
 
     }
 

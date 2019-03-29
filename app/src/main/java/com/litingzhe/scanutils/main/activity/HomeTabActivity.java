@@ -71,7 +71,6 @@ public class HomeTabActivity extends ISBaseActivity {
     private void InitView() {
 
         viewPager.setOffscreenPageLimit(1);
-
         fragmentList = new ArrayList<Fragment>();
 
         homeBaseUIFragment = new HistoryFragment();
@@ -95,7 +94,7 @@ public class HomeTabActivity extends ISBaseActivity {
 
 
         //设置ViewPager 是否可以滑动
-        viewPager.setPagingEnabled(true);
+        viewPager.setPagingEnabled(false);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

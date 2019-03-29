@@ -10,7 +10,6 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -18,13 +17,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.BarCodeDetialActivity"
-            android:label="@string/title_activity_bar_code_detial"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <!-- autoLyout 配置 -->
         <meta-data
             android:name="design_width"
@@ -32,15 +27,11 @@
         <meta-data
             android:name="design_height"
             android:value="1280" /> <!-- 启动页 -->
-        <activity
-            android:name=".LanucherActivity"
-            android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> <!-- 下载权限配置 -->
+        <!--<activity-->
+        <!--android:name=".LanucherActivity"-->
+        <!--android:launchMode="singleInstance">-->
+        <!---->
+        <!--</activity> &lt;!&ndash; 下载权限配置 &ndash;&gt;-->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.fangxaing.direction.updateFileProvider"
@@ -53,6 +44,18 @@
 
         <activity
             android:name=".main.activity.HomeTabActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.BarCodeDetialActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
