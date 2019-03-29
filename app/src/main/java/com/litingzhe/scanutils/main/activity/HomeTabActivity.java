@@ -1,8 +1,6 @@
 package com.litingzhe.scanutils.main.activity;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,20 +9,16 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.developer.androidutilslib.app.base.ISBaseActivity;
-import com.developer.androidutilslib.utils.ISAppUtils;
-import com.developer.androidutilslib.utils.ISBarUtils;
-import com.developer.androidutilslib.utils.ISFileUtils;
 import com.developer.androidutilslib.utils.ISToastUtils;
 import com.developer.androidutilslib.view.ISViewPager;
 import com.litingzhe.scanutils.R;
 import com.litingzhe.scanutils.main.adapter.MainFragmentAdapter;
 import com.litingzhe.scanutils.main.fragment.QRFragment;
-import com.litingzhe.scanutils.main.fragment.ScanFragment;
+import com.litingzhe.scanutils.main.fragment.HistoryFragment;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -56,7 +50,7 @@ public class HomeTabActivity extends ISBaseActivity {
 
     };
 
-    private ScanFragment homeBaseUIFragment;
+    private HistoryFragment homeBaseUIFragment;
     private QRFragment netAndDbDataFragment;
 
     private ArrayList<Fragment> fragmentList;
@@ -80,7 +74,7 @@ public class HomeTabActivity extends ISBaseActivity {
 
         fragmentList = new ArrayList<Fragment>();
 
-        homeBaseUIFragment = new ScanFragment();
+        homeBaseUIFragment = new HistoryFragment();
 
         netAndDbDataFragment = new QRFragment();
 

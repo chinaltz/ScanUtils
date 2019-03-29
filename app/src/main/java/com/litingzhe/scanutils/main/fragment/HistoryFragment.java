@@ -22,7 +22,7 @@ import butterknife.Unbinder;
  */
 
 
-public class ScanFragment extends Fragment {
+public class HistoryFragment extends Fragment {
 
 
     private  View rootView;
@@ -41,7 +41,7 @@ public class ScanFragment extends Fragment {
 
         if (rootView == null) {
 
-            rootView = inflater.inflate(R.layout.fragment_scan, null);
+            rootView = inflater.inflate(R.layout.fragment_history, null);
         }
         unbinder = ButterKnife.bind(this, rootView);
 

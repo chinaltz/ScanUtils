@@ -18,7 +18,9 @@ import android.widget.TextView;
 
 import com.developer.androidutilslib.utils.ISToastUtils;
 import com.developer.androidutilslib.utils.permission.ISPermissionUtils;
+import com.litingzhe.scanutils.MyApplication;
 import com.litingzhe.scanutils.R;
+import com.litingzhe.scanutils.db.BarCodeDataDao;
 
 import java.util.List;
 
@@ -72,6 +74,8 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
     private FragmentActivity mContext;
     private boolean isOpen = false;
     private static final int REQUEST_CODE_CHOOSE_QRCODE_FROM_GALLERY = 666;
+    private BarCodeDataDao barCodeDao;
+
 
 
     @Nullable
@@ -93,7 +97,7 @@ public class QRFragment extends Fragment implements QRCodeView.Delegate {
 
 
         zxingview.changeToScanQRCodeStyle();
-
+        barCodeDao = MyApplication.getInstance().getDaoSession().getBarCodeDataDao();
 
         return rootView;
 
